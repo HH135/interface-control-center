@@ -1,5 +1,6 @@
 """Exercise the packaged application over HTTP; Python standard library only."""
 import json
+import http.client
 import time
 import urllib.request
 import urllib.error
@@ -20,7 +21,7 @@ for attempt in range(60):
     try:
         if request("/actuator/health")["status"] == "UP":
             break
-    except (urllib.error.URLError, TimeoutError):
+    except (OSError, http.client.HTTPException):
         pass
     time.sleep(2)
 else:
