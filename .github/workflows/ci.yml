@@ -36,4 +36,17 @@ jobs:
           name: test-reports
           path: build/reports/tests/test
       - run: docker compose config --quiet
-      - run: docker build -t icc:ci .
+      - run: docker compose build
+      - name: Smoke test packaged application
+        env:
+          DB_PORT: '5433'
+        run: |
+          docker compose up -d
+          python3 scripts/smoke.py
+      - name: Container logs and cleanup
+        if: always()
+        env:
+          DB_PORT: '5433'
+        run: |
+          docker compose logs
+          docker compose down -v

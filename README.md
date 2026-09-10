@@ -140,6 +140,8 @@ export TEST_DB_PASSWORD=icc_test
 
 GitHub Actions는 push/PR마다 Java 21 + PostgreSQL 16 서비스로 `clean build`를 실행하고,
 테스트 리포트를 아티팩트로 보관하며 Compose 구문과 Docker 이미지 빌드를 검증합니다.
+이어 Compose로 앱과 별도 DB를 실제 기동하고 HTTP로 계약 등록 → 실패 → 재처리 → 이력/통계를 확인합니다.
+CI에서는 기존 테스트 DB와 포트가 겹치지 않도록 Compose DB의 호스트 포트를 `DB_PORT=5433`으로 설정합니다.
 검증 범위: 정상 전송, 일시/영구 실패, 타임아웃, 재처리, 중복 방지, 동시 재처리,
 입력 검증, 목록 페이지, 이력, 한국 시간 일별 집계 경계.
 빌드 결과는 `build/libs/app.jar`, 테스트 보고서는 `build/reports/tests/test/index.html`입니다.
